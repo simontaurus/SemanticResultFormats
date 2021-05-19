@@ -116,6 +116,45 @@ class GraphFormatter {
 			$this->add( "; " );
 		}
 
+                foreach ( $nodes as $child ) {
+
+                        if ( count( $child->getParentNode() ) > 0 ) {
+
+				foreach ( $child->getParentNode() as $parentNode ) {
+					$node = $parentNode['node'];
+                        		$nodeLabel = '';
+
+                        		// take "displaytitle" as node-label if it is set
+                        		if ( $this->options->getNodeLabel() === GraphPrinter::NODELABEL_DISPLAYTITLE ) {
+                                		$objectDisplayTitle = $node->getLabel();
+                                		if ( !empty( $objectDisplayTitle ) ) {
+                                        		$nodeLabel = $this->getWordWrappedText( $objectDisplayTitle, $this->options->getWordWrapLimit() );
+                                		}
+                        		}
+
+                        		/**
+                         		* Add nodes to the graph
+                         		*
+                        	 	* @var \SRF\Graph\GraphNode $node
+                        	 	*/
+                       	 		$this->add( "\"" . $node->getID() . "\"" );
+
+	                        	if ( $this->options->isGraphLink() ) {
+
+        	                        	$nodeLinkURL = "[[" . $node->getID() . "]]";
+
+                	                	if ( $nodeLabel === '' ) {
+                                        		$this->add( " [URL = \"$nodeLinkURL\"]" );
+                        	        	} else {
+                                	        	$this->add( " [URL = \"$nodeLinkURL\", label = \"$nodeLabel\"]" );
+                                		}
+                        		}
+                        		$this->add( "; " );
+
+				}
+			}
+		}
+
 		/**
 		 * Add edges to the graph
 		 *

@@ -174,13 +174,16 @@ class GraphPrinter extends ResultPrinter {
 			while ( ( /* SMWWikiPageValue */
 				$object = $resultArray->getNextDataValue() ) !== false ) {
 
-				// create SRF\GraphNode for column 0
 				if ( $i == 0 ) {
+					// create SRF\GraphNode for column 0
 					$node = new GraphNode( $object->getShortWikiText() );
-					$node->setLabel( $object->getPreferredCaption() );
+                                	$node->setLabel( $object->getPreferredCaption() );
 					$this->nodes[] = $node;
 				} else {
-					$node->addParentNode( $resultArray->getPrintRequest()->getLabel(), $object->getShortWikiText() );
+					//store objects in parentNodes = array of relations
+					$parentNode = new GraphNode( $object->getShortWikiText() );
+					$parentNode->setLabel( $object->getPreferredCaption() );
+					$node->addParentNode( $resultArray->getPrintRequest()->getLabel(), $object->getShortWikiText(), $parentNode);
 				}
 			}
 		}

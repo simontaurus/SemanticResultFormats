@@ -8,7 +8,7 @@ class GraphNode {
 	private $label;
 
 	/**
-	 * @var string $id : Node ID including namespace
+	 * @var string $id : Node ID including namespace (= FULLPAGENAME)
 	 */
 	public function __construct( $id ) {
 		$this->id = $id;
@@ -21,11 +21,13 @@ class GraphNode {
 	/**
 	 * @var string $predicate : the "predicate" linking an object to a subject
 	 * @var string $object : the object, linked to this node
+	 * @var SRF\Graph\GraphNode $node : the node object of the object
 	 */
-	public function addParentNode( $predicate, $object ) {
+	public function addParentNode( $predicate, $object, $node) {
 		$this->parent[] = [
 			"predicate" => $predicate,
-			"object"    => $object
+			"object"    => $object,
+			"node" => $node
 		];
 	}
 
