@@ -284,6 +284,12 @@ class GraphPrinter extends ResultPrinter {
 			'values' => self::$NODE_LABELS,
 		];
 
+                $params['highlight'] = [
+                        'type' => 'string',
+                        'default' => '',
+                        'message' => 'Node to highlight'
+                ];
+
 		return $params;
 	}
 }

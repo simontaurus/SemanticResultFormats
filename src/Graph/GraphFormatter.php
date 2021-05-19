@@ -107,11 +107,16 @@ class GraphFormatter {
 
 				$nodeLinkURL = "[[" . $node->getID() . "]]";
 
+				$this->add( " [");
 				if ( $nodeLabel === '' ) {
-					$this->add( " [URL = \"$nodeLinkURL\"]" );
+					$this->add( "URL = \"$nodeLinkURL\"" );
 				} else {
-					$this->add( " [URL = \"$nodeLinkURL\", label = \"$nodeLabel\"]" );
+					$this->add( "URL = \"$nodeLinkURL\", label = \"$nodeLabel\"" );
 				}
+				if ($node->getID() === $this->options->getHighlight()) {
+					$this->add( ", color = red" );
+				}
+				$this->add( "]");
 			}
 			$this->add( "; " );
 		}
