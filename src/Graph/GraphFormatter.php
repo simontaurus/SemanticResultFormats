@@ -114,7 +114,7 @@ class GraphFormatter {
 					$this->add( "URL = \"$nodeLinkURL\", label = \"$nodeLabel\"" );
 				}
 				if ($node->getID() === $this->options->getHighlight()) {
-					$this->add( ", color = red" );
+					$this->add( ", style=\"filled,bold\"" );
 				}
 				$this->add( "]");
 			}
