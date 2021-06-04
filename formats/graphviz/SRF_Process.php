@@ -290,10 +290,9 @@ class SRFProcess extends SMWResultPrinter {
 						break;
 
 					case "hasrole":
-						foreach ( $field->getContent() as $value ) {
-							$wikiPageValue = new SMWWikiPageValue( $field->getPrintRequest()->getTypeID() );
-							$wikiPageValue->setDataItem( $value );
-							$val = $wikiPageValue->getShortWikiText();
+						while ( ( /* SMWWikiPageValue */ $wikiPageValue = $field->getNextDataValue() ) !== false ) {
+							$val = $wikiPageValue->getShortWikiText();  //Page Name
+							$label = $wikiPageValue->getPreferredCaption();  //Display Title
 
 							$role = $this->m_process->makeRole( $val, $val );
 							$node->addRole( $role );
@@ -301,23 +300,21 @@ class SRFProcess extends SMWResultPrinter {
 						break;
 
 					case "usesresource":
-						foreach ( $field->getContent() as $value ) {
-							$wikiPageValue = new SMWWikiPageValue( $field->getPrintRequest()->getTypeID() );
-							$wikiPageValue->setDataItem( $value );
-							$val = $wikiPageValue->getShortWikiText();
+						while ( ( /* SMWWikiPageValue */ $wikiPageValue = $field->getNextDataValue() ) !== false ) {
+							$val = $wikiPageValue->getShortWikiText(); //Page Name
+							$label = $wikiPageValue->getPreferredCaption();  //Display Title
 
-							$xres = $this->m_process->makeRessource( $val, $val );
+							$xres = $this->m_process->makeRessource( $val, $label );
 							$node->addUsedRessource( $xres );
 						}
 						break;
 
 					case "producesresource":
-						foreach ( $field->getContent() as $value ) {
-							$wikiPageValue = new SMWWikiPageValue( $field->getPrintRequest()->getTypeID() );
-							$wikiPageValue->setDataItem( $value );
-							$val = $wikiPageValue->getShortWikiText();
+						while ( ( /* SMWWikiPageValue */ $wikiPageValue = $field->getNextDataValue() ) !== false ) {
+							$val = $wikiPageValue->getShortWikiText(); //Page Name
+							$label = $wikiPageValue->getPreferredCaption(); //Display Title
 
-							$xres = $this->m_process->makeRessource( $val, $val );
+							$xres = $this->m_process->makeRessource( $val, $label );
 							$node->addProducedRessource( $xres );
 						}
 						break;
