@@ -174,7 +174,7 @@ class GraphFormatter {
 					// handle parent/child switch (parentRelation)
 					$this->add( $this->options->getParentRelation() ? " \"" . $parentNode['object'] . "\" -> \"" .
 																	  $node->getID() . "\""
-						: " \"" . $node->getID() . "\" -> \"" . $parentNode['object'] . "\" " );
+						: " \"" . $node->getID() . "\" -> \"" . $parentNode['object'] . "\"" );
 
 					if ( $this->options->isGraphLabel() || $this->options->isGraphColor() ) {
 						$this->add( ' [' );
