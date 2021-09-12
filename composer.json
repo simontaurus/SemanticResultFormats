@@ -52,8 +52,7 @@
 		"symfony/css-selector": "^3.3",
 		"phpoffice/phpspreadsheet": "^1.0",
 		"phpoffice/phpexcel": "^1.0",
-		"mediawiki/graph-viz": "^3.1",
-		"mediawiki/mermaid": "^3.0" 
+		"mediawiki/graph-viz": "^3.1"
 	},
 	"autoload": {
 		"psr-4": {
