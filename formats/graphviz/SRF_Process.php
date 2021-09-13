@@ -477,7 +477,7 @@ class SRFProcess extends SMWResultPrinter {
                 //Replacement from working extension "graph"
                 // Calls graphvizParserHook function from MediaWiki GraphViz extension
                 //$result = $GLOBALS['wgParser']->recursiveTagParse( "<graphviz>$graphInput</graphviz>" );
-		$result = "<div class='graphviz'>$graphInput</div>";
+		$result = "<div class='graphviz' style=\"display: none;\">$graphInput</div>";
 
 		$debug = '';
 		if ( $this->m_isDebugSet ) {

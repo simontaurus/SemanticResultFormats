@@ -150,7 +150,7 @@ class GraphPrinter extends ResultPrinter {
 		// Calls graphvizParserHook function from MediaWiki GraphViz extension
 		//$result = $GLOBALS['wgParser']->recursiveTagParse( "<graphviz>" . $graphFormatter->getGraph
 		//		() . "</graphviz>" );
-		$result = "<div class='graphviz'>" . $graphFormatter->getGraph() . "</div>";
+		$result = "<div class='graphviz' style=\"display: none;\">" . $graphFormatter->getGraph() . "</div>";
 
 		// append legend
 		$result .= $graphFormatter->getGraphLegend();

@@ -105,7 +105,10 @@ class GraphFormatter {
 
 			if ( $this->options->isGraphLink() ) {
 
-				$nodeLinkURL = "[[" . $node->getID() . "]]";
+				//$nodeLinkURL = "[[" . $node->getID() . "]]";
+                                //TODO: Use $wgArticlePath
+                                $nodeLinkURL = "/wiki/" . $node->getID();
+
 
 				$this->add( " [");
 				if ( $nodeLabel === '' ) {
@@ -146,7 +149,10 @@ class GraphFormatter {
 
 	                        	if ( $this->options->isGraphLink() ) {
 
-        	                        	$nodeLinkURL = "[[" . $node->getID() . "]]";
+        	                        	//$nodeLinkURL = "[[" . $node->getID() . "]]";
+                                                //TODO: Use $wgArticlePath
+                                                $nodeLinkURL = "/wiki/" . $node->getID();
+
 
                 	                	if ( $nodeLabel === '' ) {
                                         		$this->add( " [URL = \"$nodeLinkURL\"]" );
