@@ -1065,7 +1065,7 @@ class ProcessNode extends ProcessElement {
 		} else {
 			$res =
 				'"' . $this->getId() . '"[label="' . $this->getLabel(
-				) . '",shape=rect, height=1.5, URL="[[' . $this->getId() . ']]"];
+				) . '",shape=rect, height=1.5, URL="/wiki/' . $this->getId() . '"];
 			';
 		}
 
@@ -1089,7 +1089,7 @@ class ProcessNode extends ProcessElement {
 				$rrcluster = true;
 				$rrcode .= '
 				"' . $role->getId() . '"[label="' . $role->getLabel(
-					) . '",shape=doubleoctagon, color=red, URL="[[' . $role->getId() . ']]"];
+					) . '",shape=doubleoctagon, color=red, URL="/wiki/' . $role->getId() . '"];
 				"' . $role->getId() . '" -> "' . $this->getId() . '":port1 [color=red,arrowhead = none,constraint=false];
 				';
 
@@ -1103,7 +1103,7 @@ class ProcessNode extends ProcessElement {
 				$rrcluster = true;
 				$rrcode .= '
 			"' . $xres->getId() . '"[label="' . $xres->getLabel(
-					) . '",shape=folder, color=blue, URL="[[' . $xres->getId() . ']]"];
+					) . '",shape=folder, color=blue, URL="/wiki/' . $xres->getId() . '"];
 			"' . $xres->getId() . '" -> "' . $this->getId() . '" [color=blue,constraint=false];
 				';
 			}
@@ -1114,7 +1114,7 @@ class ProcessNode extends ProcessElement {
 				$rrcluster = true;
 				$rrcode .= '
 			"' . $xres->getId() . '"[label="' . $xres->getLabel(
-					) . '",shape=folder, color=blue, URL="[[' . $xres->getId() . ']]"];
+					) . '",shape=folder, color=blue, URL="/wiki/' . $xres->getId() . '"];
 			"' . $this->getId() . '" -> "' . $xres->getId() . '" [color=forestgreen,constraint=false];
 				';
 			}
@@ -1257,7 +1257,7 @@ class SplitConditionalOrEdge extends ProcessEdge {
 
 		// True Succ
 		$res .=
-			'"' . $this->m_to_true->getId() . '" [URL = "[[' . $this->m_to_true->getId() . ']]"];
+			'"' . $this->m_to_true->getId() . '" [URL = "/wiki/' . $this->m_to_true->getId() . '"];
 		';
 
 		$res .=
@@ -1266,7 +1266,7 @@ class SplitConditionalOrEdge extends ProcessEdge {
 
 		// False Succ
 		$res .=
-			'"' . $this->m_to_false->getId() . '" [URL = "[[' . $this->m_to_false->getId() . ']]"];
+			'"' . $this->m_to_false->getId() . '" [URL = "/wiki/' . $this->m_to_false->getId() . '"];
 		';
 
 		$res .=
@@ -1303,7 +1303,7 @@ class SplitExclusiveOrEdge extends SplitEdge {
 
 		foreach ( $this->getSucc() as $s ) {
 			$res .=
-				'"' . $s->getId() . '" [URL="[[' . $s->getId() . ']]"];
+				'"' . $s->getId() . '" [URL="/wiki/' . $s->getId() . '"];
 		';
 
 			$res .=
@@ -1343,7 +1343,7 @@ class SplitParallelEdge extends SplitEdge {
 
 		foreach ( $this->getSucc() as $s ) {
 			$res .=
-				'"' . $s->getId() . '" [URL = "[[' . $s->getId() . ']]"];
+				'"' . $s->getId() . '" [URL = "/wiki/' . $s->getId() . '"];
 		';
 
 			$res .=
@@ -1393,7 +1393,7 @@ class SequentialEdge extends ProcessEdge {
 		';
 
 		$res .=
-			'"' . $s->getId() . '" [URL = "[[' . $s->getId() . ']]"];
+			'"' . $s->getId() . '" [URL = "/wiki/' . $s->getId() . '"];
 		';
 
 		$res .=
