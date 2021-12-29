@@ -111,32 +111,12 @@ class GraphPrinter extends ResultPrinter {
 	}
 
 	/**
-	 * @see ResultPrinterDependency::getDependencyError
-	 *
-	 * {@inheritDoc}
-	 */
-	public function getDependencyError() {
-		return Html::rawElement(
-			'div',
-			[
-				'class' => 'smw-callout smw-callout-error'
-			],
-			'The SRF Graph printer requires the GraphViz extension to be installed.'
-		);
-	}
-
-	/**
 	 * @param SMWQueryResult $res
 	 * @param $outputmode
 	 *
 	 * @return string
 	 */
 	protected function getResultText( SMWQueryResult $res, $outputmode ) {
-
-		// Remove this once SRF requires 3.1+
-		if ( $this->hasMissingDependency() ) {
-			return $this->getDependencyError();
-		}
 
 		// iterate query result and create SRF\GraphNodes
 		while ( $row = $res->getNext() ) {
@@ -152,7 +132,7 @@ class GraphPrinter extends ResultPrinter {
 		//$result = $parser->recursiveTagParse( "<graphviz>" . $graphFormatter->getGraph
 		//		() . "</graphviz>" );
 
-    //create div element for rendering via JS lib vizjs
+    		//create div element for rendering via JS lib vizjs
 		$result = "<div class='graphviz' style=\"display: none;\">" . $graphFormatter->getGraph() . "</div>";
 
 		// append legend
