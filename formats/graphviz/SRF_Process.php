@@ -200,18 +200,6 @@ class SRFProcess extends SMWResultPrinter {
 	 *
 	 */
 	protected function getResultText( SMWQueryResult $res, $outputmode ) {
-		//if ( !is_callable( 'renderGraphviz' ) ) {
-		//	wfWarn( 'The SRF Graph printer needs the GraphViz extension to be installed.' );
-		//	return '';
-		//}
-                //Replacement from working extension "graph"
-                if ( !class_exists( 'GraphViz' )
-                        && !class_exists( '\\MediaWiki\\Extension\\GraphViz\\GraphViz' )
-                ) {
-                        wfWarn( 'The SRF Graph printer needs the GraphViz extension to be installed.' );
-                        return '';
-                }
-
 
 		global $wgContLang; // content language object
 
@@ -473,10 +461,10 @@ class SRFProcess extends SMWResultPrinter {
                 //
                 // render graphViz code
                 //
-                //$result = renderGraphviz( $graphInput );
-                //Replacement from working extension "graph"
                 // Calls graphvizParserHook function from MediaWiki GraphViz extension
-                //$result = $GLOBALS['wgParser']->recursiveTagParse( "<graphviz>$graphInput</graphviz>" );
+                //$parser = \MediaWiki\MediaWikiServices::getInstance()->getParser();
+                //$result = $parser->recursiveTagParse( "<graphviz>" . $graphInput . "</graphviz>" );
+                //Create div element for rendering with JS lib vizjs 
 		$result = "<div class='graphviz' style=\"display: none;\">$graphInput</div>";
 
 		$debug = '';
