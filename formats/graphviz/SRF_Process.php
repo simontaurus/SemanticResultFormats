@@ -200,10 +200,18 @@ class SRFProcess extends SMWResultPrinter {
 	 *
 	 */
 	protected function getResultText( SMWQueryResult $res, $outputmode ) {
-		if ( !is_callable( 'renderGraphviz' ) ) {
-			wfWarn( 'The SRF Graph printer needs the GraphViz extension to be installed.' );
-			return '';
-		}
+		//if ( !is_callable( 'renderGraphviz' ) ) {
+		//	wfWarn( 'The SRF Graph printer needs the GraphViz extension to be installed.' );
+		//	return '';
+		//}
+                //Replacement from working extension "graph"
+                if ( !class_exists( 'GraphViz' )
+                        && !class_exists( '\\MediaWiki\\Extension\\GraphViz\\GraphViz' )
+                ) {
+                        wfWarn( 'The SRF Graph printer needs the GraphViz extension to be installed.' );
+                        return '';
+                }
+
 
 		global $wgContLang; // content language object
 
@@ -266,22 +274,25 @@ class SRFProcess extends SMWResultPrinter {
 						$value = current( $field->getContent() ); // save only the first
 
 						if ( ( $value !== false ) ) {
-							$wikiPageValue = new SMWWikiPageValue( '_wpg' );
-							$wikiPageValue->setDataItem( $value );
-							$val = $wikiPageValue->getLongWikiText();
+							//$wikiPageValue = new SMWWikiPageValue( '_wpg' );
+							//$wikiPageValue->setDataItem( $value );
+							//$val = $wikiPageValue->getLongWikiText();
+							//FIX: label should be a text property -> use it directly
+							$val = $value;
 
-							if ( $this->m_process->getUseOtherLabels() ) {
-								$val = str_replace( "&", "and", $val );
-								$node->setLabel( $val );
-							}
+							//if ( $this->m_process->getUseOtherLabels() ) {
+							//	$val = str_replace( "&", "and", $val );
+							//	$node->setLabel( $val );
+							//}
+							//FIX: methode getUseOtherLabels does not exist
+							$node->setLabel( $val );
 						}
 						break;
 
 					case "hasrole":
-						foreach ( $field->getContent() as $value ) {
-							$wikiPageValue = new SMWWikiPageValue( $field->getPrintRequest()->getTypeID() );
-							$wikiPageValue->setDataItem( $value );
-							$val = $wikiPageValue->getShortWikiText();
+						while ( ( /* SMWWikiPageValue */ $wikiPageValue = $field->getNextDataValue() ) !== false ) {
+							$val = $wikiPageValue->getShortWikiText();  //Page Name
+							$label = $wikiPageValue->getPreferredCaption();  //Display Title
 
 							$role = $this->m_process->makeRole( $val, $val );
 							$node->addRole( $role );
@@ -289,23 +300,21 @@ class SRFProcess extends SMWResultPrinter {
 						break;
 
 					case "usesresource":
-						foreach ( $field->getContent() as $value ) {
-							$wikiPageValue = new SMWWikiPageValue( $field->getPrintRequest()->getTypeID() );
-							$wikiPageValue->setDataItem( $value );
-							$val = $wikiPageValue->getShortWikiText();
+						while ( ( /* SMWWikiPageValue */ $wikiPageValue = $field->getNextDataValue() ) !== false ) {
+							$val = $wikiPageValue->getShortWikiText(); //Page Name
+							$label = $wikiPageValue->getPreferredCaption();  //Display Title
 
-							$xres = $this->m_process->makeRessource( $val, $val );
+							$xres = $this->m_process->makeRessource( $val, $label );
 							$node->addUsedRessource( $xres );
 						}
 						break;
 
 					case "producesresource":
-						foreach ( $field->getContent() as $value ) {
-							$wikiPageValue = new SMWWikiPageValue( $field->getPrintRequest()->getTypeID() );
-							$wikiPageValue->setDataItem( $value );
-							$val = $wikiPageValue->getShortWikiText();
+						while ( ( /* SMWWikiPageValue */ $wikiPageValue = $field->getNextDataValue() ) !== false ) {
+							$val = $wikiPageValue->getShortWikiText(); //Page Name
+							$label = $wikiPageValue->getPreferredCaption(); //Display Title
 
-							$xres = $this->m_process->makeRessource( $val, $val );
+							$xres = $this->m_process->makeRessource( $val, $label );
 							$node->addProducedRessource( $xres );
 						}
 						break;
@@ -458,11 +467,17 @@ class SRFProcess extends SMWResultPrinter {
 		// generate graphInput
 		//
 		$graphInput = $this->m_process->getGraphVizCode();
+		MWDebug::log('Node: '. $graphInput);
 
-		//
-		// render graphViz code
-		//
-		$result = renderGraphviz( $graphInput );
+
+                //
+                // render graphViz code
+                //
+                //$result = renderGraphviz( $graphInput );
+                //Replacement from working extension "graph"
+                // Calls graphvizParserHook function from MediaWiki GraphViz extension
+                //$result = $GLOBALS['wgParser']->recursiveTagParse( "<graphviz>$graphInput</graphviz>" );
+		$result = "<div class='graphviz' style=\"display: none;\">$graphInput</div>";
 
 		$debug = '';
 		if ( $this->m_isDebugSet ) {
@@ -1050,7 +1065,7 @@ class ProcessNode extends ProcessElement {
 		} else {
 			$res =
 				'"' . $this->getId() . '"[label="' . $this->getLabel(
-				) . '",shape=rect, height=1.5, URL="[[' . $this->getId() . ']]"];
+				) . '",shape=rect, height=1.5, URL="/wiki/' . $this->getId() . '"];
 			';
 		}
 
@@ -1074,7 +1089,7 @@ class ProcessNode extends ProcessElement {
 				$rrcluster = true;
 				$rrcode .= '
 				"' . $role->getId() . '"[label="' . $role->getLabel(
-					) . '",shape=doubleoctagon, color=red, URL="[[' . $role->getId() . ']]"];
+					) . '",shape=doubleoctagon, color=red, URL="/wiki/' . $role->getId() . '"];
 				"' . $role->getId() . '" -> "' . $this->getId() . '":port1 [color=red,arrowhead = none,constraint=false];
 				';
 
@@ -1082,24 +1097,28 @@ class ProcessNode extends ProcessElement {
 		}
 
 		if ( $this->getProcess()->getShowRessources() ) {
-
+			//FIX: Change order produced before used
+			//FIX: remove ':port1' statement 
 			foreach ( $this->getUsedRessources() as $xres ) {
 				$rrcluster = true;
 				$rrcode .= '
 			"' . $xres->getId() . '"[label="' . $xres->getLabel(
-					) . '",shape=folder, color=blue, URL="[[' . $xres->getId() . ']]"];
-			"' . $xres->getId() . '" -> "' . $this->getId() . '":port1 [color=blue,constraint=false];
+					) . '",shape=folder, color=blue, URL="/wiki/' . $xres->getId() . '"];
+			"' . $xres->getId() . '" -> "' . $this->getId() . '" [color=blue,constraint=false];
 				';
 			}
 
+			 //FIX: remove ':port1' statement
+			 //FIX: set color from blue to green, change port
 			foreach ( $this->getProducedRessources() as $xres ) {
 				$rrcluster = true;
 				$rrcode .= '
 			"' . $xres->getId() . '"[label="' . $xres->getLabel(
-					) . '",shape=folder, color=blue, URL="[[' . $xres->getId() . ']]"];
-			"' . $this->getId() . '":port1 -> "' . $xres->getId() . '" [color=blue,constraint=false];
+					) . '",shape=folder, color=blue, URL="/wiki/' . $xres->getId() . '"];
+			"' . $this->getId() . '" -> "' . $xres->getId() . '" [color=forestgreen,constraint=false];
 				';
 			}
+
 
 		}
 
@@ -1238,7 +1257,7 @@ class SplitConditionalOrEdge extends ProcessEdge {
 
 		// True Succ
 		$res .=
-			'"' . $this->m_to_true->getId() . '" [URL = "[[' . $this->m_to_true->getId() . ']]"];
+			'"' . $this->m_to_true->getId() . '" [URL = "/wiki/' . $this->m_to_true->getId() . '"];
 		';
 
 		$res .=
@@ -1247,7 +1266,7 @@ class SplitConditionalOrEdge extends ProcessEdge {
 
 		// False Succ
 		$res .=
-			'"' . $this->m_to_false->getId() . '" [URL = "[[' . $this->m_to_false->getId() . ']]"];
+			'"' . $this->m_to_false->getId() . '" [URL = "/wiki/' . $this->m_to_false->getId() . '"];
 		';
 
 		$res .=
@@ -1284,7 +1303,7 @@ class SplitExclusiveOrEdge extends SplitEdge {
 
 		foreach ( $this->getSucc() as $s ) {
 			$res .=
-				'"' . $s->getId() . '" [URL="[[' . $s->getId() . ']]"];
+				'"' . $s->getId() . '" [URL="/wiki/' . $s->getId() . '"];
 		';
 
 			$res .=
@@ -1324,7 +1343,7 @@ class SplitParallelEdge extends SplitEdge {
 
 		foreach ( $this->getSucc() as $s ) {
 			$res .=
-				'"' . $s->getId() . '" [URL = "[[' . $s->getId() . ']]"];
+				'"' . $s->getId() . '" [URL = "/wiki/' . $s->getId() . '"];
 		';
 
 			$res .=
@@ -1374,7 +1393,7 @@ class SequentialEdge extends ProcessEdge {
 		';
 
 		$res .=
-			'"' . $s->getId() . '" [URL = "[[' . $s->getId() . ']]"];
+			'"' . $s->getId() . '" [URL = "/wiki/' . $s->getId() . '"];
 		';
 
 		$res .=

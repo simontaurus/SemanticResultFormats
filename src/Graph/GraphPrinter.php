@@ -148,10 +148,12 @@ class GraphPrinter extends ResultPrinter {
 		$graphFormatter->buildGraph( $this->nodes );
 
 		// Calls graphvizParserHook function from MediaWiki GraphViz extension
-		$parser = \MediaWiki\MediaWikiServices::getInstance()->getParser();
+		//$parser = \MediaWiki\MediaWikiServices::getInstance()->getParser();
+		//$result = $parser->recursiveTagParse( "<graphviz>" . $graphFormatter->getGraph
+		//		() . "</graphviz>" );
 
-		$result = $parser->recursiveTagParse( "<graphviz>" . $graphFormatter->getGraph
-				() . "</graphviz>" );
+    //create div element for rendering via JS lib vizjs
+		$result = "<div class='graphviz' style=\"display: none;\">" . $graphFormatter->getGraph() . "</div>";
 
 		// append legend
 		$result .= $graphFormatter->getGraphLegend();
@@ -185,9 +187,13 @@ class GraphPrinter extends ResultPrinter {
 						$node->setLabel( $object->getPreferredCaption() ?: $object->getText() );
 						$this->nodes[] = $node;
 					} else {
+            //store objects in parentNodes = array of relations
+					  $parentNode = new GraphNode( $object->getShortWikiText() );
+					  $parentNode->setLabel( $object->getPreferredCaption() ?: $object->getText() );
 						$node->addParentNode(
 							$resultArray->getPrintRequest()->getLabel(),
-							$object->getShortWikiText()
+							$object->getShortWikiText(),
+              $parentNode
 						);
 					}
 				} else {
@@ -297,6 +303,12 @@ class GraphPrinter extends ResultPrinter {
 			'message' => 'srf-paramdesc-nodelabel',
 			'values' => self::$NODE_LABELS,
 		];
+
+                $params['highlight'] = [
+                        'type' => 'string',
+                        'default' => '',
+                        'message' => 'Node to highlight'
+                ];
 
 		return $params;
 	}

@@ -28,6 +28,7 @@ class GraphOptions {
 	private $showGraphLabel;
 	private $showGraphColor;
 	private $showGraphLegend;
+	private $highlight;
 
 	public function __construct( $options ) {
 		$this->graphName = trim( $options['graphname'] );
@@ -43,6 +44,7 @@ class GraphOptions {
 		$this->showGraphLabel = trim( $options['graphlabel'] );
 		$this->showGraphColor = trim( $options['graphcolor'] );
 		$this->showGraphLegend = trim( $options['graphlegend'] );
+		$this->highlight = trim( str_replace("_"," ",$options['highlight']) );
 	}
 
 	public function getGraphName(): string {
@@ -96,4 +98,8 @@ class GraphOptions {
 	public function isGraphLegend(): bool {
 		return $this->showGraphLegend;
 	}
+
+  public function getHighlight(): string {
+    return $this->highlight;
+  }
 }
