@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Ankabel",
 			"Beta16",
 			"Civvì",
@@ -92,7 +93,7 @@
 	"srf-gallery-navigation-previous": "Precedente",
 	"srf-gallery-navigation-next": "Successivo",
 	"srf-gallery-overlay-count": "Immagine $1 di $2",
-	"srf-gallery-image-url-error": "L'immagine non è stato trovata.",
+	"srf-gallery-image-url-error": "L'immagine non è stata trovata.",
 	"srf_paramdesc_minsize": "La dimensione dei tag più piccoli in percentuale",
 	"srf_printername_hash": "Hash",
 	"srf-printername-graph": "Grafico",
@@ -107,12 +108,14 @@
 	"srf-ui-datatables-label-information": "Informazioni",
 	"srf-ui-datatables-label-placeholder-column-search": "Ricerca in corso...",
 	"srf-ui-datatables-label-multiselect-column-header": "Colonne disponibili",
+	"srf-ui-datatables-label-sInfoThousands": "&nbsp;",
 	"srf-ui-datatables-label-sLoadingRecords": "Caricamento...",
 	"srf-ui-datatables-label-sProcessing": "Elaborazione...",
 	"srf-ui-datatables-label-oPaginate-sFirst": "Primo",
 	"srf-ui-datatables-label-oPaginate-sLast": "Ultimo",
 	"srf-ui-datatables-label-oPaginate-sNext": "Successivo",
 	"srf-ui-datatables-label-oPaginate-sPrevious": "Precedente",
+	"srf-printername-tree": "Albero",
 	"srf-paramdesc-delay": "Il ritardo tra le slide in secondi",
 	"srf-paramdesc-filtered-map-height": "L'altezza della mappa.",
 	"srf-filtered-selectorlabel-list": "Elenco",

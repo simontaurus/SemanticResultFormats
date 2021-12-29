@@ -148,8 +148,11 @@ class GraphPrinter extends ResultPrinter {
 		$graphFormatter->buildGraph( $this->nodes );
 
 		// Calls graphvizParserHook function from MediaWiki GraphViz extension
-		//$result = $GLOBALS['wgParser']->recursiveTagParse( "<graphviz>" . $graphFormatter->getGraph
+		//$parser = \MediaWiki\MediaWikiServices::getInstance()->getParser();
+		//$result = $parser->recursiveTagParse( "<graphviz>" . $graphFormatter->getGraph
 		//		() . "</graphviz>" );
+
+    //create div element for rendering via JS lib vizjs
 		$result = "<div class='graphviz' style=\"display: none;\">" . $graphFormatter->getGraph() . "</div>";
 
 		// append legend
@@ -175,16 +178,32 @@ class GraphPrinter extends ResultPrinter {
 			while ( ( /* SMWWikiPageValue */
 				$object = $resultArray->getNextDataValue() ) !== false ) {
 
-				if ( $i == 0 ) {
+				$type = $object->getTypeID();
+				if ( in_array( $type, [ '_wpg', '_wpp', '_wps', '_wpu', '__sup', '__sin', '__suc', '__con' ] ) ) {
+					// This is a page. A new node and an edge have to be created.
 					// create SRF\GraphNode for column 0
-					$node = new GraphNode( $object->getShortWikiText() );
-                                	$node->setLabel( $object->getPreferredCaption() );
-					$this->nodes[] = $node;
+					if ( $i === 0 ) {
+						$node = new GraphNode( $object->getShortWikiText() );
+						$node->setLabel( $object->getPreferredCaption() ?: $object->getText() );
+						$this->nodes[] = $node;
+					} else {
+            //store objects in parentNodes = array of relations
+					  $parentNode = new GraphNode( $object->getShortWikiText() );
+					  $parentNode->setLabel( $object->getPreferredCaption() ?: $object->getText() );
+						$node->addParentNode(
+							$resultArray->getPrintRequest()->getLabel(),
+							$object->getShortWikiText(),
+              $parentNode
+						);
+					}
 				} else {
-					//store objects in parentNodes = array of relations
-					$parentNode = new GraphNode( $object->getShortWikiText() );
-					$parentNode->setLabel( $object->getPreferredCaption() );
-					$node->addParentNode( $resultArray->getPrintRequest()->getLabel(), $object->getShortWikiText(), $parentNode);
+					// A non-page property.
+					$node->addField(
+						$resultArray->getPrintRequest()->getOutputFormat(),
+						$object->getShortWikiText(),
+						$type,
+						$resultArray->getPrintRequest()->getLabel()
+					);
 				}
 			}
 		}
@@ -294,3 +313,4 @@ class GraphPrinter extends ResultPrinter {
 		return $params;
 	}
 }
+

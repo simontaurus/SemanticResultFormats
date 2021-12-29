@@ -99,8 +99,7 @@ class GraphOptions {
 		return $this->showGraphLegend;
 	}
 
-        public function getHighlight(): string {
-                return $this->highlight;
-        }
-
+  public function getHighlight(): string {
+    return $this->highlight;
+  }
 }

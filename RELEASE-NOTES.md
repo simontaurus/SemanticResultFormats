@@ -1,13 +1,23 @@
 These are the release notes for the [Semantic Result Formats](https://www.semantic-mediawiki.org/wiki/Extension:Semantic_Result_Formats) (a.k.a SRF) MediaWiki extension.
 
+## SRF 4.0.0
+
+not yet released
+
+* [Filtered] added "list view userparam" (by [gesinn.it](https://gesinn.it))
+* [Gallery] added "captiontemplate" parameter to allow wrapping of image captions with a template
+* [GraphViz] fields of data type other than 'page' are now displayed not as separate nodes connected by edges but as parts of labels of nodes of the type 'record' and similar
+
 ## SRF 3.2.0
 
 Released on August 27, 2020.
 
 * Added new statistical result formats `mode`, `variance`, `samplevariance`, `standarddeviation`, `samplestandarddeviation`, `quartilupper`, `quartilupper.exc`, `quartillower`, `quartillower.exc`, `interquartilerange`, `interquartilerange.exc`, `interquartilemean` (by [KDZ](https://www.kdz.eu))
 * Added `hidezeroes` parameter to the `jqplotseries` format (by [Professional.Wiki][ProWiki])
+* Added support for `introtemplate`, `outrotemplate` and `{{#itemsubjectraw}}` for Outline format (by [gesinn.it](https://gesinn.it))
 * Added `graphfontsize` parameter to the `graph` format
 * Improved compatibility with upcoming MediaWiki versions
+* Updated translations (by translatewiki.net community)
 
 ## SRF 3.1.0
 

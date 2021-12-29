@@ -6,6 +6,7 @@ class GraphNode {
 	private $id;
 	private $parent = [];
 	private $label;
+	private $fields = [];
 
 	/**
 	 * @var string $id : Node ID including namespace (= FULLPAGENAME)
@@ -19,16 +20,33 @@ class GraphNode {
 	}
 
 	/**
-	 * @var string $predicate : the "predicate" linking an object to a subject
-	 * @var string $object : the object, linked to this node
-	 * @var SRF\Graph\GraphNode $node : the node object of the object
+	 * @param string $predicate : the "predicate" linking an object to a subject
+	 * @param string $object : the object, linked to this node
+	 * @param SRF\Graph\GraphNode $node : the node object of the object
 	 */
 	public function addParentNode( $predicate, $object, $node) {
 		$this->parent[] = [
-			"predicate" => $predicate,
-			"object"    => $object,
-			"node" => $node
+			'predicate' => $predicate,
+			'object'    => $object,
+			'node'      => $node
 		];
+	}
+
+	/**
+	 * @param string $name : Field name
+	 * @param string $value : Field value
+	 * @param string $type : Type of the field, for aligning
+	 * @param string $page : Property page
+	 */
+	public function addField( $name, $value, $type, $page ) {
+		$this->fields[] = [ 'name' => $name ?: $page, 'value' => $value, 'type' => $type, 'page' => $page ];
+	}
+
+	/**
+	 * Get all fields.
+	 */
+	public function getFields() {
+		return $this->fields;
 	}
 
 	/**
@@ -49,3 +67,4 @@ class GraphNode {
 		return $this->label;
 	}
 }
+

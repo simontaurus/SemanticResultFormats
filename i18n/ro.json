@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
+			"Andrei Stroe",
 			"KlaudiuMihaila",
 			"Minisarm",
+			"NGC 54",
 			"Stelistcristi"
 		]
 	},
@@ -23,7 +25,8 @@
 	"srf-ui-gridview-label-chart-tab": "Diagramă",
 	"srf-ui-gridview-label-info-tab": "Informații",
 	"srf_printername_gallery": "Galerie",
-	"srf_paramdesc_graphname": "Titlu",
+	"srf-printername-graph": "Grafic",
+	"srf-paramdesc-graphname": "Stabilește titlul graficului",
 	"srf-printername-filtered": "Filtrat",
 	"srf-filtered-selectorlabel-list": "Listă",
 	"srf-filtered-selectorlabel-calendar": "Calendar",

@@ -1,18 +1,16 @@
 # Semantic Result Formats
-
-[![Build Status](https://secure.travis-ci.org/SemanticMediaWiki/SemanticResultFormats.svg?branch=master)](http://travis-ci.org/SemanticMediaWiki/SemanticResultFormats)
+[![CI](https://github.com/SemanticMediaWiki/SemanticResultFormats/actions/workflows/main.yml/badge.svg)](https://github.com/SemanticMediaWiki/SemanticResultFormats/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/SemanticMediaWiki/SemanticResultFormats/branch/master/graph/badge.svg?token=Si45N9MsGq)](https://codecov.io/gh/SemanticMediaWiki/SemanticResultFormats)
 [![Latest Stable Version](https://poser.pugx.org/mediawiki/semantic-result-formats/version.png)](https://packagist.org/packages/mediawiki/semantic-result-formats)
 [![Packagist download count](https://poser.pugx.org/mediawiki/semantic-result-formats/d/total.png)](https://packagist.org/packages/mediawiki/semantic-result-formats)
 
-Semantic Result Formats (a.k.a. SRF) is an extension to MediaWiki that bundles a number of result
-formats for [Semantic MediaWiki's][smw] inline queries. The individual formats can be added to the
-installation independently. For more information, visit the [SRF homepage][srf] or consult the
+Semantic Result Formats (SRF) is a MediaWiki extension that provides extra visualizations (result formats) for [Semantic MediaWiki][smw] queries. For more information, see the [Semantic Result Formats documentation][srf] or consult the
 [release notes](RELEASE-NOTES.md).
 
 ## Requirements
 
-- PHP 7.0 or later
-- MediaWiki 1.31 or later
+- PHP 7.3.19 or later
+- MediaWiki 1.35 or later
 - Semantic MediaWiki 3.0 or later
 
 ## Installation
@@ -41,8 +39,6 @@ A list of people who have made contributions in the past can be found [here][con
 This extension provides unit and integration tests and are normally run by a [continues integration platform][travis]
 but can also be executed locally using the shortcut command `composer phpunit` from the extension base directory.
 
-[![Code Coverage](https://scrutinizer-ci.com/g/SemanticMediaWiki/SemanticResultFormats/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/SemanticMediaWiki/SemanticResultFormats/?branch=master)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/SemanticMediaWiki/SemanticResultFormats/badges/quality-score.png?s=a2f091e91cb9c8aa297e028f2f30d99153446796)](https://scrutinizer-ci.com/g/SemanticMediaWiki/SemanticResultFormats/)
 
 ## License
 

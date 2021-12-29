@@ -92,15 +92,12 @@ class Gallery extends ResultPrinter {
 			// Slideshow widget
 			$ig->setAttributes( $this->getSlideshowWidget() );
 		} else {
-
 			// Standard gallery attributes
-			$attribs = [
-				'id' => uniqid(),
-				'class' => $this->getImageOverlay(),
-			];
-
-			$ig->setAttributes( $attribs );
+			$ig->setAttributes( $this->getStandardWidget() );
 		}
+
+		// In any case we depend on mediawiki.page.gallery.styles
+		SMWOutputs::requireStyle('mediawiki.page.gallery.styles');
 
 		// Only use redirects where the overlay option is not used and redirect
 		// thumb images towards a different target
@@ -179,6 +176,13 @@ class Gallery extends ResultPrinter {
 		if ( $this->linkFurtherResults( $results ) ) {
 			$html .= $this->getLink( $results, SMW_OUTPUT_HTML )->getText( SMW_OUTPUT_HTML, $this->mLinker );
 		}
+
+		// If available and no results, return default message
+
+		if ( $results == '' && $this->params[ 'default' ] !== '' ) {
+			$html = $this->params[ 'default' ];
+		}
+
 
 		return [ $html, 'nowiki' => true, 'isHTML' => true ];
 	}
@@ -323,6 +327,15 @@ class Gallery extends ResultPrinter {
 				$imgCaption = $ig->mParser->recursiveTagParse( $imgCaption );
 			}
 		}
+
+		if ( $this->params['captiontemplate'] !== '' ) {
+			$templateCode = "{{" . $this->params['captiontemplate'] .
+				"|imageraw=".$imgTitle->getPrefixedText()."|imagecaption=$imgCaption|imageredirect=$imgRedirect}}";
+
+			$imgCaption = $ig->mParser->recursiveTagParse( $templateCode );
+
+		}
+
 		// Use image alt as helper for either text
 		$imgAlt = $this->params['redirects'] === '' ? $imgCaption : ( $imgRedirect !== '' ? $imgRedirect : '' );
 		$ig->add( $imgTitle, $imgCaption, $imgAlt );
@@ -342,6 +355,16 @@ class Gallery extends ResultPrinter {
 		} else {
 			return '';
 		}
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getStandardWidget() {
+		return [
+			'id' => uniqid(),
+			'class' => $this->getImageOverlay()
+		];
 	}
 
 	/**
@@ -476,6 +499,12 @@ class Gallery extends ResultPrinter {
 			'type' => 'string',
 			'default' => '',
 			'message' => 'srf_paramdesc_captionproperty'
+		];
+
+		$params['captiontemplate'] = [
+			'type' => 'string',
+			'default' => '',
+			'message' => 'srf-paramdesc-captiontemplate'
 		];
 
 		$params['imageproperty'] = [
