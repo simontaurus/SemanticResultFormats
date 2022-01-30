@@ -1048,7 +1048,7 @@ class ProcessNode extends ProcessElement {
 			$res =
 				'"' . $this->getId(
 				) . '" [shape=plaintext,label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">' . $compound . '</TD><TD BORDER="0" WIDTH="80%"></TD><TD ALIGN="RIGHT" BORDER="0" WIDTH="20px"' . $status . '></TD><TD ALIGN="RIGHT" BORDER="0" WIDTH="20px"' . $discussion . '></TD></TR><TR><TD COLSPAN="4" PORT="port1" HREF="[[' . $this->getId(
-				) . ']]" TOOLTIP="' . $this->getLabel() . '"><FONT' . $high . '>' . $this->getLabel() . '</FONT></TD> </TR></TABLE>>];
+				) . ']]" TOOLTIP="' . $this->getLabel() . '"><FONT' . $high . '>' . $this->getLabel() . '</FONT></TD> </TR></TABLE>>, URL="/wiki/' . $this->getId() . '"];
 			';
 		} else {
 			$res =
