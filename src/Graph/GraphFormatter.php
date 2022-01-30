@@ -17,8 +17,8 @@ use SRF\Graph\GraphNode;
  *
  */
 class GraphFormatter {
-
-	private $graph = '';
+       
+        private $graph = '';
 
 	protected $graphColors = [
 		'black',
@@ -65,6 +65,7 @@ class GraphFormatter {
 	* @param SRF\Graph\GraphNodes[] $nodes
 	*/
 	public function buildGraph( $nodes ) {
+
 		$this->add( "digraph " . $this->options->getGraphName() . " {" );
 
 		// set fontsize and fontname of graph, nodes and edges
@@ -96,9 +97,11 @@ class GraphFormatter {
 			}
 
 			// URL.
-			$nodeLinkURL = $this->options->isGraphLink() ? "[[" . $node->getID() . "]]" : null;
+			//$nodeLinkURL = $this->options->isGraphLink() ? "[[:" . $node->getID() . "]]" : null; //does not work for categories / pages with display title
+                        global $wgArticlePath; //e. g. /wiki/$1
+                        $nodeLinkURL =  $this->options->isGraphLink() ? str_replace('$1', $node->getID(), $wgArticlePath) : null;
 
-			// Display fields, if any.
+                        // Display fields, if any.
 			$fields = $node->getFields();
 			if ( count( $node->getFields() ) > 0 ) {
 				$label = $nodeLabel
@@ -122,7 +125,7 @@ class GraphFormatter {
 					// Label, if any, is enclosed with "".
 					$nodeLabel = '"' . htmlspecialchars( $nodeLabel ) . '"';
 				}
-				$nodeTooltip = null;
+				$nodeTooltip = $node->getID();
 			}
 
 			/**
@@ -132,32 +135,13 @@ class GraphFormatter {
 			 */
 			$this->add( '"' . htmlspecialchars( $node->getID() ) . '"' );
 
-      //from master
-			//$inBrackets = [];
-			//if ( $nodeLinkURL ) {
-			//	$inBrackets[] = 'URL = "' . $nodeLinkURL . '"';
-      //}
-
-      //from fork
-			if ( $this->options->isGraphLink() ) {
-
-				//$nodeLinkURL = "[[" . $node->getID() . "]]";
-                                //TODO: Use $wgArticlePath
-                                $nodeLinkURL = "/wiki/" . $node->getID();
-
-
-				$this->add( " [");
-				if ( $nodeLabel === '' ) {
-					$this->add( "URL = \"$nodeLinkURL\"" );
-				} else {
-					$this->add( "URL = \"$nodeLinkURL\", label = \"$nodeLabel\"" );
-				}
-				if ($node->getID() === $this->options->getHighlight()) {
-					$this->add( ", style=\"filled,bold\"" );
-				}
-				$this->add( "]");
-			}
-      
+			$inBrackets = [];
+			if ( $nodeLinkURL ) {
+				$inBrackets[] = 'URL = "' . $nodeLinkURL . '"';
+                        }
+		        if ($node->getID() === $this->options->getHighlight()) {
+                                $inBrackets[] = "style=\"filled,bold\"";
+		        }
 			if ( $nodeLabel ) {
 				$inBrackets[] = 'label = ' . $nodeLabel;
 			}
@@ -177,13 +161,13 @@ class GraphFormatter {
 
 				foreach ( $child->getParentNode() as $parentNode ) {
 					$node = $parentNode['node'];
-                        		$nodeLabel = '';
+                        		$nodeLabel = null;
 
                         		// take "displaytitle" as node-label if it is set
                         		if ( $this->options->getNodeLabel() === GraphPrinter::NODELABEL_DISPLAYTITLE ) {
                                 		$objectDisplayTitle = $node->getLabel();
                                 		if ( !empty( $objectDisplayTitle ) ) {
-                                        		$nodeLabel = $this->getWordWrappedText( $objectDisplayTitle, $this->options->getWordWrapLimit() );
+                                        		$nodeLabel = '"' . $this->getWordWrappedText( $objectDisplayTitle, $this->options->getWordWrapLimit() ) . '"';
                                 		}
                         		}
 
@@ -194,20 +178,28 @@ class GraphFormatter {
                         	 	*/
                        	 		$this->add( "\"" . $node->getID() . "\"" );
 
-	                        	if ( $this->options->isGraphLink() ) {
+                                        //$nodeLinkURL = $this->options->isGraphLink() ? "[[" . $node->getID() . "]]" : null; //does not work for categories / pages with display title
+                                        $nodeLinkURL =  $this->options->isGraphLink() ? str_replace('$1', $node->getID(), $wgArticlePath) : null;
 
-        	                        	//$nodeLinkURL = "[[" . $node->getID() . "]]";
-                                                //TODO: Use $wgArticlePath
-                                                $nodeLinkURL = "/wiki/" . $node->getID();
+                                        $nodeTooltip = $node->getID();
 
-
-                	                	if ( $nodeLabel === '' ) {
-                                        		$this->add( " [URL = \"$nodeLinkURL\"]" );
-                        	        	} else {
-                                	        	$this->add( " [URL = \"$nodeLinkURL\", label = \"$nodeLabel\"]" );
-                                		}
+                       		 	$inBrackets = [];
+                        		if ( $nodeLinkURL ) {
+                                		$inBrackets[] = 'URL = "' . $nodeLinkURL . '"';
                         		}
-                        		$this->add( "; " );
+                        		if ($node->getID() === $this->options->getHighlight()) {
+                                		$inBrackets[] = "style=\"filled,bold\"";
+                        		}
+                        		if ( $nodeLabel ) {
+                                		$inBrackets[] = 'label = ' . $nodeLabel;
+                        		}
+                        		if ( $nodeTooltip ) {
+                               			$inBrackets[] = 'tooltip = "' .  htmlspecialchars( $nodeTooltip ) . '"';
+                        		}
+                        		if ( count( $inBrackets ) > 0 ) {
+                                		$this->add( ' [' . implode( ', ', $inBrackets ) . ']' );
+                        		}
+                        		$this->add( ";\n" );
 
 				}
 			}
