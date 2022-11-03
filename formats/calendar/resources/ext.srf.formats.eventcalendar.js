@@ -561,6 +561,10 @@
 								// redirect to a clicktarget URL if defined.
 								 self.onDayClick( date, data, self.messages.clickPopup );
 							}
+						},
+						viewRender: function(view, element) {
+							//hotfix for https://stackoverflow.com/questions/43227050/jquery-fullcalendar-displayed-undefined-on-title
+							$('.fc-center h2').text(view.title.replaceAll("undefined", ""));
 						}
 					} );
 				},
