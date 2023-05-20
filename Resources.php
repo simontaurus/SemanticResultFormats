@@ -729,6 +729,7 @@ return [
 	// Eventcalendar widgets
 	'ext.srf.widgets.eventcalendar' => $formatModule + [
 		'scripts' => [
+			'calendar/resources/ext.srf.widgets.moment.min.js',
 			'calendar/resources/ext.srf.widgets.calendarpane.js',
 			'calendar/resources/ext.srf.widgets.calendarbutton.js',
 			'calendar/resources/ext.srf.widgets.calendarparameters.js',
